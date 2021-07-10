@@ -1,9 +1,9 @@
 import React from "react";
 import { GetServerSideProps } from "next";
 import ReactMarkdown from "react-markdown";
-import Layout from "../../components/Layout";
-import { PostProps } from "../../components/Post";
-import prisma from "../../lib/prisma";
+import Layout from "../../src/components/Layout";
+import { PostProps } from "../../src/components/Post";
+import prisma from "../../src/lib/prisma";
 
 export const getServerSideProps: GetServerSideProps = async ({ params }) => {
   const post = await prisma.post.findUnique({
