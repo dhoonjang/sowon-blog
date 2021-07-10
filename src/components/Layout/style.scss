@@ -1,0 +1,41 @@
+@import "../index.scss";
+
+.Layout {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  .bg-img {
+    position: absolute;
+    z-index: -1;
+    min-width: 100%;
+    min-height: 100vh;
+    background-size: cover;
+    left: 0;
+    top: 0;
+
+    user-select: none;
+    pointer-events: none;
+  }
+  .window {
+    display: grid;
+    grid-template-columns: 1fr 2.5fr;
+    border-radius: 12px;
+    width: 95vw;
+    height: 95vh;
+    max-width: 1000px;
+    gap: 5px;
+    max-height: 600px;
+    .side-bar,
+    .content {
+      background: rgba(#fff, 0.95);
+      border-radius: 10px;
+      box-shadow: $shadow_7;
+    }
+    .nav {
+      position: absolute;
+    }
+  }
+}

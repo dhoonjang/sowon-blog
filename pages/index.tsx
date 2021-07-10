@@ -1,54 +1,38 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { GetStaticProps } from "next";
 import Layout from "../src/components/Layout";
-import Post, { PostProps } from "../src/components/Post";
+import Home from "../src/components/Home";
 import prisma from "../src/lib/prisma";
+import { IHomeProps } from "../src/components/Home";
+import { useSetRecoilState } from "recoil";
+import userState, { IUserState } from "../src/context/user";
 
 export const getStaticProps: GetStaticProps = async () => {
+  const user = await prisma.user.findUnique({
+    where: { id: 1 },
+  });
   const feed = await prisma.post.findMany({
     where: { published: true },
-    include: {
-      author: {
-        select: { name: true },
-      },
-    },
   });
-  return { props: { feed } };
+  return { props: { feed, user } };
 };
 
-type Props = {
-  feed: PostProps[];
-};
+export interface IHomePageProps extends IHomeProps {
+  user: IUserState;
+}
 
-const Blog: React.FC<Props> = (props) => {
+const HomePage: React.FC<IHomePageProps> = ({ user, ...props }) => {
+  const setUserState = useSetRecoilState(userState);
+
+  useEffect(() => {
+    setUserState(user);
+  }, [user]);
+
   return (
     <Layout>
-      <div className="page">
-        <h1>Public Feed</h1>
-        <main>
-          {props.feed.map((post) => (
-            <div key={post.id} className="post">
-              <Post post={post} />
-            </div>
-          ))}
-        </main>
-      </div>
-      <style jsx>{`
-        .post {
-          background: white;
-          transition: box-shadow 0.1s ease-in;
-        }
-
-        .post:hover {
-          box-shadow: 1px 1px 3px #aaa;
-        }
-
-        .post + .post {
-          margin-top: 2rem;
-        }
-      `}</style>
+      <Home {...props} />
     </Layout>
   );
 };
 
-export default Blog;
+export default HomePage;

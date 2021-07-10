@@ -8,9 +8,10 @@ generator client {
 }
 
 model User {
-  id   Int    @id @default(autoincrement())
-  name String @unique
-  pw   String
+  id         Int     @id @default(autoincrement())
+  name       String  @unique
+  pw         String
+  bgImageUrl String?
 }
 
 model DateSummary {
