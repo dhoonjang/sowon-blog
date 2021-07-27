@@ -1,3 +1,5 @@
+import { useRecoilValue } from "recoil";
+import userState from "../../context/user";
 import Post, { PostProps } from "../Post";
 
 export interface IHomeProps {
@@ -5,6 +7,8 @@ export interface IHomeProps {
 }
 
 const Home: React.FC<IHomeProps> = ({ feed }) => {
+  const { isLogin } = useRecoilValue(userState);
+  console.log(isLogin);
   return (
     <div className="Home">
       <main>
