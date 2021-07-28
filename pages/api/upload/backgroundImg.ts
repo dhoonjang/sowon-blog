@@ -1,6 +1,7 @@
 import multer from "multer";
 import prisma from "src/lib/prisma";
 import apiRoute from "src/lib/route";
+import { IFileRequest } from "./profileImg";
 
 const uploadBackground = multer({
   storage: multer.diskStorage({
@@ -11,22 +12,34 @@ const uploadBackground = multer({
 
 const route = apiRoute();
 
-route.use(uploadBackground.single("backgroundImg"));
+route
+  .use(uploadBackground.single("backgroundImg"))
+  .post<IFileRequest>(async (req, res) => {
+    const bgImageUrl = req.file.path.substr(6);
 
-route.post(async (req: any, res) => {
-  const bgImageUrl = req.file.path.substr(6);
+    await prisma.user.update({
+      where: {
+        id: 1,
+      },
+      data: {
+        bgImageUrl,
+      },
+    });
 
-  await prisma.user.update({
-    where: {
-      id: 1,
-    },
-    data: {
-      bgImageUrl,
-    },
+    res.status(200).json({ success: true, path: bgImageUrl });
+  })
+  .delete(async (_, res) => {
+    await prisma.user.update({
+      where: {
+        id: 1,
+      },
+      data: {
+        bgImageUrl: null,
+      },
+    });
+
+    res.status(202).json({ success: true });
   });
-
-  res.status(200).json({ success: true, path: bgImageUrl });
-});
 
 export default route;
 

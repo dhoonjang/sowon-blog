@@ -11,22 +11,40 @@ const uploadProfile = multer({
 
 const route = apiRoute();
 
-route.use(uploadProfile.single("profileImg"));
+export interface IFileRequest {
+  file: {
+    path: string;
+  };
+}
 
-route.post(async (req: any, res) => {
-  const profileImageUrl = req.file.path.substr(6);
+route
+  .use(uploadProfile.single("profileImg"))
+  .post<IFileRequest>(async (req, res) => {
+    const profileImageUrl = req.file.path.substr(6);
 
-  await prisma.user.update({
-    where: {
-      id: 1,
-    },
-    data: {
-      profileImageUrl,
-    },
+    await prisma.user.update({
+      where: {
+        id: 1,
+      },
+      data: {
+        profileImageUrl,
+      },
+    });
+
+    res.status(200).json({ success: true, path: profileImageUrl });
+  })
+  .delete(async (_, res) => {
+    await prisma.user.update({
+      where: {
+        id: 1,
+      },
+      data: {
+        profileImageUrl: null,
+      },
+    });
+
+    res.status(202).json({ success: true });
   });
-
-  res.status(200).json({ success: true, path: profileImageUrl });
-});
 
 export default route;
 

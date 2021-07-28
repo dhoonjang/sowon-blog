@@ -4,6 +4,7 @@ import userState from "src/context/user";
 import Link from "next/link";
 import authState from "src/context/auth";
 import axios from "axios";
+import { fileRequestConfig } from "src/lib/axios";
 
 export interface ILayoutProps {}
 
@@ -33,7 +34,7 @@ const Layout: React.FC<ILayoutProps> = ({ children }) => {
     });
 
     const config = {
-      headers: { "content-type": "multipart/form-data" },
+      ...fileRequestConfig,
       onUploadProgress: (event) => {
         console.log(
           `Current progress:`,
@@ -76,15 +77,43 @@ const Layout: React.FC<ILayoutProps> = ({ children }) => {
       />
       <div className="window">
         <div className="side-bar">
-          <img src={profileImageUrl} alt="" className="profile-img" />
+          {profileImageUrl && (
+            <img src={profileImageUrl} alt="" className="profile-img" />
+          )}
           <div className="name">{name}</div>
           {isLogin && (
             <>
               <button onClick={() => backRef.current.click()}>
                 배경 이미지 선택
               </button>
+              <button
+                onClick={async () => {
+                  const res = await axios.delete("/api/upload/backgroundImg");
+                  if (res.status === 202) {
+                    setUserState((state) => ({
+                      ...state,
+                      bgImageUrl: null,
+                    }));
+                  }
+                }}
+              >
+                배경 이미지 삭제
+              </button>
               <button onClick={() => profileRef.current.click()}>
                 프로필 이미지 선택
+              </button>
+              <button
+                onClick={async () => {
+                  const res = await axios.delete("/api/upload/profileImg");
+                  if (res.status === 202) {
+                    setUserState((state) => ({
+                      ...state,
+                      profileImageUrl: null,
+                    }));
+                  }
+                }}
+              >
+                프로필 이미지 삭제
               </button>
             </>
           )}

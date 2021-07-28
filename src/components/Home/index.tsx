@@ -1,5 +1,7 @@
+import { useRef, useState } from "react";
 import { useRecoilValue } from "recoil";
 import authState from "src/context/auth";
+import Editor, { IEditor } from "../Editor";
 import Post, { PostProps } from "../Post";
 
 export interface IHomeProps {
@@ -8,6 +10,8 @@ export interface IHomeProps {
 
 const Home: React.FC<IHomeProps> = ({ feed }) => {
   const isLogin = useRecoilValue(authState);
+  const [value, setValue] = useState<string>("");
+  const ref = useRef<IEditor>(null);
 
   return (
     <div className="Home">
@@ -18,6 +22,7 @@ const Home: React.FC<IHomeProps> = ({ feed }) => {
           </div>
         ))}
       </main>
+      <Editor ref={ref} value={value} onChange={setValue} />
     </div>
   );
 };
