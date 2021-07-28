@@ -1,5 +1,5 @@
 import React, { useRef } from "react";
-import { useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import userState from "src/context/user";
 import Link from "next/link";
 import authState from "src/context/auth";
@@ -7,10 +7,17 @@ import axios from "axios";
 
 export interface ILayoutProps {}
 
+const imageInputProps = {
+  type: "file",
+  style: { display: "none" },
+  accept: "image/*",
+};
+
 const Layout: React.FC<ILayoutProps> = ({ children }) => {
   const isLogin = useRecoilValue(authState);
 
-  const { bgImageUrl, name } = useRecoilValue(userState);
+  const [{ bgImageUrl, profileImageUrl, name }, setUserState] =
+    useRecoilState(userState);
 
   const backRef = useRef<HTMLInputElement>(null);
   const profileRef = useRef<HTMLInputElement>(null);
@@ -18,10 +25,11 @@ const Layout: React.FC<ILayoutProps> = ({ children }) => {
   const onChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     if (!event.target.files?.length) return;
 
+    const targetName = event.target.name;
     const formData = new FormData();
 
     Array.from(event.target.files).forEach((file) => {
-      formData.append(event.target.name, file);
+      formData.append(targetName, file);
     });
 
     const config = {
@@ -35,37 +43,40 @@ const Layout: React.FC<ILayoutProps> = ({ children }) => {
     };
 
     const response = await axios.post(
-      `/api/upload/${event.target.name}`,
+      `/api/upload/${targetName}`,
       formData,
       config,
     );
 
-    console.log("response", response.data);
+    setUserState((state) => ({
+      ...state,
+      bgImageUrl:
+        targetName === "backgroundImg" ? response.data.path : state.bgImageUrl,
+      profileImageUrl:
+        targetName === "profileImg"
+          ? response.data.path
+          : state.profileImageUrl,
+    }));
   };
-
-  console.log(bgImageUrl);
 
   return (
     <div className="Layout">
       <img src={bgImageUrl} alt="" className="bg-img" />
       <input
-        type="file"
         name="backgroundImg"
         ref={backRef}
-        style={{ display: "none" }}
-        accept="image/*"
         onChange={onChange}
+        {...imageInputProps}
       />
       <input
-        type="file"
         name="profileImg"
         ref={profileRef}
-        style={{ display: "none" }}
-        accept="image/*"
         onChange={onChange}
+        {...imageInputProps}
       />
       <div className="window">
         <div className="side-bar">
+          <img src={profileImageUrl} alt="" className="profile-img" />
           <div className="name">{name}</div>
           {isLogin && (
             <>
