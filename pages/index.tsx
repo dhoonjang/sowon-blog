@@ -25,7 +25,7 @@ const HomePage: React.FC<IHomePageProps> = ({ user, ...props }) => {
   const setUserState = useSetRecoilState(userState);
 
   useEffect(() => {
-    setUserState(({ isLogin }) => ({ isLogin, ...user }));
+    setUserState(user);
   }, [user]);
 
   return (

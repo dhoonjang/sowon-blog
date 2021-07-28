@@ -2,12 +2,12 @@ import axios from "axios";
 import { useRouter } from "next/router";
 import { useCallback, useRef } from "react";
 import { useSetRecoilState } from "recoil";
-import userState from "../../src/context/user";
+import authState from "src/context/auth";
 
 const LoginPage = () => {
   const router = useRouter();
   const inputRef = useRef<HTMLInputElement>(null);
-  const setUserState = useSetRecoilState(userState);
+  const setAuthState = useSetRecoilState(authState);
 
   const loginFunc = useCallback(async () => {
     const user = await axios.post("/api/login", {
@@ -15,7 +15,7 @@ const LoginPage = () => {
     });
 
     if (user.data.success) {
-      setUserState((u) => ({ ...u, isLogin: true }));
+      setAuthState(true);
       router.push("/");
     } else alert("비밀번호가 틀렸습니다");
   }, []);

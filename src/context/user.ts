@@ -1,7 +1,6 @@
 import { atom } from "recoil";
 
 export interface IUserState {
-  isLogin: boolean;
   id: number;
   name: string;
   pw: string;
@@ -10,9 +9,8 @@ export interface IUserState {
 }
 
 const userState = atom<IUserState>({
-  key: "usersState",
+  key: "userState",
   default: {
-    isLogin: false,
     id: -1,
     name: "",
     pw: "",

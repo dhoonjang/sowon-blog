@@ -1,5 +1,5 @@
-import { NextApiRequest, NextApiResponse } from "next-auth/_utils";
-import prisma from "../../src/lib/prisma";
+import { NextApiRequest, NextApiResponse } from "next";
+import prisma from "src/lib/prisma";
 
 const loginHandler = async (req: NextApiRequest, res: NextApiResponse) => {
   const { pw } = req.body;
@@ -11,14 +11,14 @@ const loginHandler = async (req: NextApiRequest, res: NextApiResponse) => {
   });
 
   if (result) {
-    res.json({
+    res.status(200).json({
       success: true,
     });
+  } else {
+    res.status(401).json({
+      success: false,
+    });
   }
-
-  res.json({
-    success: false,
-  });
 };
 
 export default loginHandler;
