@@ -1,7 +1,10 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import prisma from "src/lib/prisma";
+import apiRoute from "src/lib/route";
 
-const loginHandler = async (req: NextApiRequest, res: NextApiResponse) => {
+const route = apiRoute();
+
+route.post(async (req: NextApiRequest, res: NextApiResponse) => {
   const { pw } = req.body;
 
   const result = await prisma.user.findFirst({
@@ -19,6 +22,6 @@ const loginHandler = async (req: NextApiRequest, res: NextApiResponse) => {
       success: false,
     });
   }
-};
+});
 
-export default loginHandler;
+export default route;
