@@ -1,28 +1,56 @@
-import { useRef, useState } from "react";
-import { useRecoilValue } from "recoil";
+import axios from "axios";
+import { useCallback, useRef, useState } from "react";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 import authState from "src/context/auth";
+import feedState, { postSelector } from "src/context/feed";
 import Editor, { IEditor } from "../Editor";
-import Post, { PostProps } from "../Post";
+import PostComponent from "../PostComponent";
 
-export interface IHomeProps {
-  feed: PostProps[];
-}
-
-const Home: React.FC<IHomeProps> = ({ feed }) => {
+const Home: React.FC = () => {
   const isLogin = useRecoilValue(authState);
-  const [value, setValue] = useState<string>("");
-  const ref = useRef<IEditor>(null);
+
+  const posts = useRecoilValue(postSelector);
+  const setFeedState = useSetRecoilState(feedState);
+
+  const titleRef = useRef<HTMLInputElement>(null);
+  const contentRef = useRef<IEditor>(null);
+
+  const submitPost = useCallback(async () => {
+    if (!titleRef.current || !contentRef.current) return;
+
+    const post = await axios.post("/api/post", {
+      title: titleRef.current.value,
+      content: contentRef.current.value,
+    });
+
+    if (post.status === 200) {
+      setFeedState((f) => {
+        const postList = [...f.postList, post.data];
+        return {
+          ...f,
+          postList,
+        };
+      });
+
+      titleRef.current.value = "";
+      contentRef.current.setValue("");
+    }
+  }, []);
 
   return (
     <div className="Home">
+      {isLogin && (
+        <div className="editor-area">
+          제목: <input ref={titleRef} />
+          <button onClick={submitPost}>글 올리기</button>
+          <Editor className="editor" ref={contentRef} />
+        </div>
+      )}
       <main>
-        {feed.map((post) => (
-          <div key={post.id} className="post">
-            <Post post={post} />
-          </div>
+        {posts.map((post) => (
+          <PostComponent post={post} key={post.id} />
         ))}
       </main>
-      <Editor ref={ref} value={value} onChange={setValue} />
     </div>
   );
 };

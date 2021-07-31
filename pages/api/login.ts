@@ -18,7 +18,7 @@ route.post(async (req: NextApiRequest, res: NextApiResponse) => {
       success: true,
     });
   } else {
-    res.status(401).json({
+    res.status(201).json({
       success: false,
     });
   }

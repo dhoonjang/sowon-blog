@@ -4,7 +4,7 @@ import { recoilPersist } from "recoil-persist";
 const { persistAtom } = recoilPersist();
 
 const authState = atom({
-  key: "authState",
+  key: "authStateKey",
   default: false,
   effects_UNSTABLE: [persistAtom],
 });

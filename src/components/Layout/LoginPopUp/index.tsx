@@ -1,11 +1,9 @@
 import axios from "axios";
-import { useRouter } from "next/router";
 import { useCallback, useRef } from "react";
 import { useSetRecoilState } from "recoil";
 import authState from "src/context/auth";
 
-const LoginPage = () => {
-  const router = useRouter();
+const LoginPopUp: React.FC<{ closeFunc: () => void }> = ({ closeFunc }) => {
   const inputRef = useRef<HTMLInputElement>(null);
   const setAuthState = useSetRecoilState(authState);
 
@@ -16,8 +14,10 @@ const LoginPage = () => {
 
     if (user.data.success) {
       setAuthState(true);
-      router.push("/");
-    } else alert("비밀번호가 틀렸습니다");
+      closeFunc();
+    } else if (user.status === 201) {
+      alert("비밀번호가 틀렸습니다");
+    }
   }, []);
 
   return (
@@ -28,4 +28,4 @@ const LoginPage = () => {
   );
 };
 
-export default LoginPage;
+export default LoginPopUp;

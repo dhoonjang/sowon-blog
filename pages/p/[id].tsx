@@ -1,9 +1,13 @@
 import React from "react";
 import { GetServerSideProps } from "next";
-import ReactMarkdown from "react-markdown";
-import Layout from "../../src/components/Layout";
-import { PostProps } from "../../src/components/Post";
-import prisma from "../../src/lib/prisma";
+import Layout from "src/components/Layout";
+import prisma from "src/lib/prisma";
+import cn from "classnames";
+import { IPost } from "src/context/feed";
+import { useRecoilValue } from "recoil";
+import authState from "src/context/auth";
+import { useEffect } from "react";
+import Router from "next/router";
 
 export const getServerSideProps: GetServerSideProps = async ({ params }) => {
   const post = await prisma.post.findUnique({
@@ -12,26 +16,34 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
     },
   });
   return {
-    props: post,
+    props: {
+      ...post,
+      createdAt: post.createdAt.toString(),
+      updatedAt: post.createdAt.toString(),
+    },
   };
 };
 
-const Post: React.FC<PostProps> = (props) => {
-  let title = props.title;
+const PostPage: React.FC<IPost> = ({ title, published, content }) => {
+  const isLogin = useRecoilValue(authState);
 
-  if (!props.published) {
-    title = `${title} (Draft)`;
-  }
+  useEffect(() => {
+    if (!isLogin && !published) {
+      Router.push("/");
+    }
+  }, []);
 
   return (
     <Layout>
-      <div>
+      <div className={cn("PostPage", { published })}>
         <h2>{title}</h2>
-        <p>By {props?.author?.name || "Unknown author"}</p>
-        <ReactMarkdown source={props.content} />
+        <div
+          className="ql-editor content-inner"
+          dangerouslySetInnerHTML={{ __html: content }}
+        />
       </div>
     </Layout>
   );
 };
 
-export default Post;
+export default PostPage;

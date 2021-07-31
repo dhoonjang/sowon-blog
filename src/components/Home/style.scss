@@ -1,3 +1,38 @@
+@import "../index.scss";
+
 .Home {
-  padding: 20px;
+  .editor-area {
+    margin-top: 10px;
+    margin-bottom: 30px;
+    button {
+      margin-left: 10px;
+    }
+    .editor {
+      margin-top: 10px;
+    }
+  }
+  .PostComponent {
+    padding: 10px;
+    border: dashed 1px #333;
+    margin-bottom: 20px;
+    cursor: pointer;
+    .title-area {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      .left {
+        align-items: center;
+        display: flex;
+      }
+      .title {
+        margin: 0px;
+        margin-right: 12px;
+      }
+      .date {
+        font-size: 12px;
+        color: $gray_6;
+      }
+    }
+  }
 }

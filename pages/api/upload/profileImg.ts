@@ -1,4 +1,5 @@
 import multer from "multer";
+import { NextApiRequest, NextApiResponse } from "next";
 import prisma from "src/lib/prisma";
 import apiRoute from "src/lib/route";
 
@@ -11,7 +12,7 @@ const uploadProfile = multer({
 
 const route = apiRoute();
 
-export interface IFileRequest {
+export interface IFileRequest extends NextApiRequest {
   file: {
     path: string;
   };
@@ -19,7 +20,7 @@ export interface IFileRequest {
 
 route
   .use(uploadProfile.single("profileImg"))
-  .post<IFileRequest>(async (req, res) => {
+  .post<IFileRequest, NextApiResponse>(async (req, res) => {
     const profileImageUrl = req.file.path.substr(6);
 
     await prisma.user.update({

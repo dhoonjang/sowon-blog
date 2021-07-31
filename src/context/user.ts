@@ -9,7 +9,7 @@ export interface IUserState {
 }
 
 const userState = atom<IUserState>({
-  key: "userState",
+  key: "userStateKey",
   default: {
     id: -1,
     name: "",

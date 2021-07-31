@@ -1,10 +1,12 @@
-import React, { useRef } from "react";
-import { useRecoilState, useRecoilValue } from "recoil";
+import React, { useRef, useState } from "react";
+import { useRecoilState } from "recoil";
 import userState from "src/context/user";
-import Link from "next/link";
 import authState from "src/context/auth";
 import axios from "axios";
 import { fileRequestConfig } from "src/lib/axios";
+import LoginPopUp from "./LoginPopUp";
+import cn from "classnames";
+import Router, { useRouter } from "next/router";
 
 export interface ILayoutProps {}
 
@@ -15,10 +17,13 @@ const imageInputProps = {
 };
 
 const Layout: React.FC<ILayoutProps> = ({ children }) => {
-  const isLogin = useRecoilValue(authState);
+  const [isLogin, setAuthState] = useRecoilState(authState);
+  const { pathname } = useRouter();
 
   const [{ bgImageUrl, profileImageUrl, name }, setUserState] =
     useRecoilState(userState);
+
+  const [loginPop, setLoginPop] = useState<boolean>(false);
 
   const backRef = useRef<HTMLInputElement>(null);
   const profileRef = useRef<HTMLInputElement>(null);
@@ -38,7 +43,7 @@ const Layout: React.FC<ILayoutProps> = ({ children }) => {
       onUploadProgress: (event) => {
         console.log(
           `Current progress:`,
-          Math.round((event.loaded * 100) / event.total),
+          Math.round((event.loaded * 100) / event.total)
         );
       },
     };
@@ -46,7 +51,7 @@ const Layout: React.FC<ILayoutProps> = ({ children }) => {
     const response = await axios.post(
       `/api/upload/${targetName}`,
       formData,
-      config,
+      config
     );
 
     setUserState((state) => ({
@@ -118,15 +123,34 @@ const Layout: React.FC<ILayoutProps> = ({ children }) => {
             </>
           )}
           {isLogin ? (
-            <div className="auth-area">로그인!</div>
+            <button className="auth-area" onClick={() => setAuthState(false)}>
+              로그아웃
+            </button>
           ) : (
-            <Link href="/login">
-              <div className="auth-area">로그인?</div>
-            </Link>
+            <button
+              className="auth-area"
+              onClick={() => setLoginPop(!loginPop)}
+            >
+              {name} 님이신가요?
+            </button>
           )}
+          {loginPop && <LoginPopUp closeFunc={() => setLoginPop(false)} />}
         </div>
         <div className="content">{children}</div>
-        <div className="nav"></div>
+        <div className="nav">
+          <div
+            className={cn("nav-btn", { current: pathname === "/" })}
+            onClick={() => Router.push("/")}
+          >
+            홈
+          </div>
+          <div
+            className={cn("nav-btn", { current: pathname === "/diary" })}
+            onClick={() => Router.push("/diary")}
+          >
+            다이어리
+          </div>
+        </div>
       </div>
     </div>
   );
