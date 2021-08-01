@@ -22,6 +22,7 @@ route
         id: Number(id),
       },
     });
+
     res.status(200).json(deleteDiary);
   })
   .put(async (req, res) => {

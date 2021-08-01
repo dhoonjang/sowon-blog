@@ -11,7 +11,7 @@ import moment from "moment";
 
 export interface ILayoutProps {}
 
-const imageInputProps = {
+export const imageInputProps = {
   type: "file",
   style: { display: "none" },
   accept: "image/*",
@@ -157,6 +157,14 @@ const Layout: React.FC<ILayoutProps> = ({ children }) => {
             }
           >
             다이어리
+          </div>
+          <div
+            className={cn("nav-btn", {
+              current: pathname.search("/photo") === 0,
+            })}
+            onClick={() => Router.push("/photo")}
+          >
+            사진첩
           </div>
         </div>
       </div>

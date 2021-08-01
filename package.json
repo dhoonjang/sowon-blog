@@ -18,6 +18,7 @@
     "@types/node-sass": "^4.11.2",
     "axios": "^0.21.1",
     "classnames": "^2.3.1",
+    "fs": "^0.0.1-security",
     "immer": "^9.0.5",
     "md5": "^2.3.0",
     "moment": "^2.29.1",

@@ -84,4 +84,36 @@
       }
     }
   }
+  .submit-area {
+    display: flex;
+    align-items: flex-start;
+    .file-list {
+      .file {
+        padding: 5px 10px;
+        border: 1px dashed $gray_5;
+        width: max-content;
+        color: $gray_6;
+        font-size: 12px;
+      }
+      margin-right: 10px;
+    }
+    textarea {
+      margin-right: 10px;
+      height: 40px;
+      resize: none;
+    }
+  }
+  .photo-grid {
+    margin-top: 10px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 6px;
+    .photo {
+      img {
+        border: solid 1px $gray_5;
+        border-radius: 4px;
+        width: 100%;
+      }
+    }
+  }
 }

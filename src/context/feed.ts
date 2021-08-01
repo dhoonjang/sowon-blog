@@ -1,7 +1,13 @@
-import { DateSummary, Post } from "@prisma/client";
+import { DateSummary, PhotoSummary, Post } from "@prisma/client";
 import moment from "moment";
 import { atom, selector } from "recoil";
 import authState from "./auth";
+
+export interface IPhotoSummary
+  extends Omit<PhotoSummary, "createdAt" | "updatedAt"> {
+  createdAt: string;
+  updatedAt: string;
+}
 
 export interface IPost extends Omit<Post, "createdAt" | "updatedAt"> {
   createdAt: string;
