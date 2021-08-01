@@ -26,12 +26,13 @@ route
   })
   .patch(async (req, res) => {
     const { id, published } = req.body;
+    console.log(published);
     const updatePost = await prisma.post.update({
       where: {
         id,
       },
       data: {
-        published,
+        published: published,
       },
     });
     res.status(200).json({

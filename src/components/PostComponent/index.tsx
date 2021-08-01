@@ -12,30 +12,36 @@ const PostComponent: React.FC<{ post: IPost }> = ({ post }) => {
   const isLogin = useRecoilValue(authState);
   const setPosts = useSetRecoilState(postSelector);
 
-  const updateFunc = useCallback(async (e: React.MouseEvent) => {
-    e.stopPropagation();
-    const dp = await axios.patch("/api/post", {
-      id: post.id,
-      published: !post.published,
-    });
-    setPosts((posts) => {
-      return produce(posts, (draft) => {
-        const index = draft.findIndex((f) => f.id === dp.data.id);
-        draft.splice(index, 1, dp.data);
+  const updateFunc = useCallback(
+    async (e: React.MouseEvent) => {
+      e.stopPropagation();
+      const dp = await axios.patch("/api/post", {
+        id: post.id,
+        published: !post.published,
       });
-    });
-  }, []);
+      setPosts((posts) => {
+        return produce(posts, (draft) => {
+          const index = draft.findIndex((f) => f.id === dp.data.id);
+          draft.splice(index, 1, dp.data);
+        });
+      });
+    },
+    [post]
+  );
 
-  const deleteFunc = useCallback(async (e: React.MouseEvent) => {
-    e.stopPropagation();
-    const dp = await axios.delete("/api/post", { params: { id: post.id } });
-    setPosts((posts) => {
-      return produce(posts, (draft) => {
-        const index = draft.findIndex((f) => f.id === dp.data.id);
-        draft.splice(index, 1);
+  const deleteFunc = useCallback(
+    async (e: React.MouseEvent) => {
+      e.stopPropagation();
+      const dp = await axios.delete("/api/post", { params: { id: post.id } });
+      setPosts((posts) => {
+        return produce(posts, (draft) => {
+          const index = draft.findIndex((f) => f.id === dp.data.id);
+          draft.splice(index, 1);
+        });
       });
-    });
-  }, []);
+    },
+    [post]
+  );
 
   return (
     <div

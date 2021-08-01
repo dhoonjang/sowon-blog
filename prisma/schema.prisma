@@ -23,6 +23,14 @@ model DateSummary {
   updatedAt DateTime @updatedAt @map(name: "updated_at")
 }
 
+model PhotoSummary {
+  id        Int      @id @default(autoincrement())
+  imageUrl  String
+  summary   String?
+  createdAt DateTime @default(now()) @map(name: "created_at")
+  updatedAt DateTime @updatedAt @map(name: "updated_at")
+}
+
 model Post {
   id        Int       @id @default(autoincrement())
   title     String
