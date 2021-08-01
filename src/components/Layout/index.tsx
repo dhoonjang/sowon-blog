@@ -7,6 +7,7 @@ import { fileRequestConfig } from "src/lib/axios";
 import LoginPopUp from "./LoginPopUp";
 import cn from "classnames";
 import Router, { useRouter } from "next/router";
+import moment from "moment";
 
 export interface ILayoutProps {}
 
@@ -145,8 +146,15 @@ const Layout: React.FC<ILayoutProps> = ({ children }) => {
             홈
           </div>
           <div
-            className={cn("nav-btn", { current: pathname === "/diary" })}
-            onClick={() => Router.push("/diary")}
+            className={cn("nav-btn", {
+              current: pathname.search("/diary") === 0,
+            })}
+            onClick={() =>
+              Router.push(
+                "/diary/[id]",
+                `/diary/${moment().format("YYYYMMDD")}`
+              )
+            }
           >
             다이어리
           </div>

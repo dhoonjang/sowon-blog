@@ -1,0 +1,80 @@
+@import "../index.scss";
+
+.Diary {
+  .month-button-area {
+    display: flex;
+    justify-content: center;
+    .year-month {
+      margin: 0 30px;
+      text-align: center;
+      .year {
+        font-size: 14px;
+        color: $gray_6;
+        margin-bottom: 5px;
+      }
+    }
+  }
+  .date-area {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 4px;
+    width: 100%;
+    .date {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 32px;
+      height: 32px;
+      margin: 2px;
+      margin-top: 12px;
+    }
+  }
+  .table {
+    margin-top: 4px;
+    padding: 0 4px;
+    box-sizing: border-box;
+    .week {
+      display: flex;
+      justify-content: space-between;
+      .day {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 32px;
+        height: 32px;
+        margin: 2px;
+        border-radius: 8px;
+        font-weight: 600;
+        box-sizing: border-box;
+        cursor: pointer;
+        &:hover {
+          background: $gray_1;
+        }
+        &.today {
+          background: $gray_6;
+          border: none;
+          color: #fff;
+          &:hover {
+            background: $gray_7;
+          }
+        }
+        &.select {
+          background: $blue_5;
+          color: #fff;
+          &:hover {
+            background: $blue_5;
+          }
+        }
+        &.prev,
+        &.next {
+          color: $gray_5;
+        }
+        &.disabled {
+          background: transparent;
+          color: $gray_5;
+          cursor: not-allowed;
+        }
+      }
+    }
+  }
+}
