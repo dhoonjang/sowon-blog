@@ -51,7 +51,7 @@ const HomePage: React.FC<IHomePageProps> = ({ user, feed }) => {
   useEffect(() => {
     setFeedState(feed);
     setUserState(user);
-  }, [user]);
+  }, [user, feed]);
 
   return (
     <Layout>
