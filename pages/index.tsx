@@ -26,6 +26,7 @@ export const getStaticProps: GetStaticProps = async () => {
         })),
         dateSummaryList: dateSummaryList.map((d) => ({
           ...d,
+          date: d.date.toString(),
           createdAt: d.createdAt.toString(),
           updatedAt: d.updatedAt.toString(),
         })),

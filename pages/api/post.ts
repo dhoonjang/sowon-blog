@@ -13,7 +13,6 @@ route
         content,
       },
     });
-
     res.status(200).json(post);
   })
   .delete(async (req, res) => {

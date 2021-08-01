@@ -1,6 +1,7 @@
 import React, { useImperativeHandle, useState } from "react";
 import cn from "classnames";
 import dynamic from "next/dynamic";
+import { useRef } from "react";
 
 const QuillEditor = dynamic(() => import("react-quill"), {
   ssr: false,
@@ -61,6 +62,7 @@ interface IQuillProps {
 
 const Editor = React.forwardRef<IEditor, IQuillProps>(
   ({ placeholder, className }, ref) => {
+    const inputRef = useRef<any>(null);
     const [value, setValue] = useState<string>("");
 
     useImperativeHandle(ref, () => {

@@ -4,6 +4,7 @@
   .month-button-area {
     display: flex;
     justify-content: center;
+    margin-bottom: 8px;
     .year-month {
       margin: 0 30px;
       text-align: center;
@@ -15,18 +16,15 @@
     }
   }
   .date-area {
-    display: flex;
-    justify-content: space-between;
-    padding: 0 4px;
-    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
     .date {
       display: flex;
       justify-content: center;
+      justify-self: center;
       align-items: center;
       width: 32px;
       height: 32px;
-      margin: 2px;
-      margin-top: 12px;
     }
   }
   .table {
@@ -34,21 +32,31 @@
     padding: 0 4px;
     box-sizing: border-box;
     .week {
-      display: flex;
-      justify-content: space-between;
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      margin-bottom: 4px;
       .day {
         display: flex;
+        justify-self: center;
         justify-content: center;
         align-items: center;
         width: 32px;
         height: 32px;
-        margin: 2px;
-        border-radius: 8px;
+        border-radius: 4px;
         font-weight: 600;
         box-sizing: border-box;
         cursor: pointer;
+        position: relative;
+        .dot {
+          position: absolute;
+          right: -10px;
+          width: 5px;
+          height: 5px;
+          border-radius: 50%;
+          background-color: $gray_7;
+        }
         &:hover {
-          background: $gray_1;
+          background: $gray_3;
         }
         &.today {
           background: $gray_6;
@@ -76,5 +84,18 @@
         }
       }
     }
+  }
+  .diary-area {
+    margin-top: 20px;
+    padding: 10px;
+    border: dashed 1px $gray_6;
+    .none-message {
+      margin: 0;
+      color: $gray_6;
+      font-weight: 300;
+    }
+  }
+  .editor-area {
+    margin-top: 20px;
   }
 }

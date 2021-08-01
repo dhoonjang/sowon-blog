@@ -35,6 +35,17 @@ export const postSelector = selector<IPost[]>({
   },
 });
 
+export const dateSummarySelector = selector<IDateSummary[]>({
+  key: "dateSummarySelectorKey",
+  get: ({ get }) => get(feedState).dateSummaryList,
+  set: ({ set }, dateSummaryList: IDateSummary[]) => {
+    set(feedState, (f) => ({
+      ...f,
+      dateSummaryList,
+    }));
+  },
+});
+
 const feedState = atom<IFeedState>({
   key: "feedStateKey",
   default: {
